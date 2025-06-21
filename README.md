@@ -42,3 +42,15 @@ yarn install
 
 # Run development server
 yarn dev
+
+## 📸 Screenshots
+
+### 🖥️ Desktop View
+
+![Desktop View](screenshots/screenshot-desktop.png)
+
+
+### 📱 Mobile View
+
+![Mobile View](screenshots/screenshot-mobile.png)
+

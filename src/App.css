@@ -2,3 +2,31 @@
   text-align: center;
   background-color: #f2f5f5;
 }
+
+@keyframes headerBackgroundZoomPan {
+  0% {
+    background-position: center;
+    background-size: 100%;
+  }
+  50% {
+    background-position: center 20%;
+    background-size: 105%;
+  }
+  100% {
+    background-position: center;
+    background-size: 100%;
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #00dbe3, #23a2bb, #173039);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}

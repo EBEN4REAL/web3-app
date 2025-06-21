@@ -1,109 +1,54 @@
-import React, { FC } from "react";
-import Box from "@mui/material/Box";
+import React from "react";
+import { Box } from "@mui/material";
+import { NavLink, useLocation } from "react-router-dom";
 import { navigations } from "./navigation.data";
-import { Link } from "@mui/material";
-import { useLocation } from "react-router-dom";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount } from "wagmi";
 import { ConnectButton, useConnectModal } from "@rainbow-me/rainbowkit";
+import AppButton from "../button/Button";
+import { curveIconSx, NavigationContainer, navItemStyles } from "./Navigation.styles";
 
-type NavigationData = {
-  path: string;
-  label: string;
-};
-
-const Navigation: FC = () => {
+const NavigationMenu = () => {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const { isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
+  const { isConnected: isWalletConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "nowrap",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: 2,
-      }}
-    >
-      {navigations.map(({ path: destination, label }: NavigationData) => (
-        <Box
-          key={label}
-          component={Link}
-          href={destination}
-          sx={{
-            display: "inline-flex",
-            position: "relative",
-            color: currentPath === destination ? "" : "white",
-            lineHeight: "30px",
-            letterSpacing: "3px",
-            cursor: "pointer",
-            textDecoration: "none",
-            textTransform: "uppercase",
-            fontWeight: 700,
-            alignItems: "center",
-            justifyContent: "center",
-            px: 1,
-            fontSize: "16px",
-            ...(destination === "/" && { color: "primary.main" }),
-            "& > div": { display: "none" },
-            "&.current>div": { display: "block" },
-            "&:hover": {
-              color: "text.disabled",
-            },
-          }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: 12,
-              transform: "rotate(3deg)",
-              "& img": { width: 44, height: "auto" },
-            }}
-          >
-            <img src="/images/headline-curve.svg" alt="Headline curve" />
-          </Box>
-          {label}
+    <>
+      <NavigationContainer>
+        {navigations.map(({ path, label }) => {
+          const isActive = currentPath === path;
+          const isHome = path === "/";
+          return (
+            <Box
+              key={label}
+              component={NavLink}
+              to={path}
+              sx={navItemStyles(isActive, isHome)}
+            >
+              <Box className="curve-icon" sx={curveIconSx}>
+                <img src="/images/headline-curve.svg" alt={`${label} curve`} />
+              </Box>
+              {label}
+            </Box>
+          );
+        })}
+        <Box sx={{ ml: "auto" }}>
+          {!isWalletConnected ? (
+            <AppButton
+              variantType="primary"
+              onClick={() => openConnectModal?.()}
+            >
+              Connect Wallet
+            </AppButton>
+          ) : (
+            <ConnectButton />
+          )}
         </Box>
-      ))}
-
-      <Box
-        sx={{
-          ml: "auto", // push to far right
-        }}
-      >
-        {!isConnected ? (
-          <Box
-            sx={{
-              color: "white",
-              cursor: "pointer",
-              textDecoration: "none",
-              textTransform: "uppercase",
-              fontWeight: 600,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "16px",
-              width: "180px",
-              height: "45px",
-              borderRadius: "6px",
-              backgroundColor: "#00dbe3",
-              ":hover": { backgroundColor: "#00c0c8" },
-            }}
-            onClick={() => openConnectModal?.()}
-          >
-            Connect Wallet
-          </Box>
-        ) : (
-          <ConnectButton />
-        )}
-      </Box>
-    </Box>
+      </NavigationContainer>
+    </>
   );
 };
 
-export default Navigation;
+export default NavigationMenu;

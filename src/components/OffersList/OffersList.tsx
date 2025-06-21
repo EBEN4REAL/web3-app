@@ -1,128 +1,124 @@
 import React from "react";
 import {
   Box,
-  Table,
-  TableBody,
-  TableCell,
   TableHead,
   TableRow,
-  IconButton,
+  TableBody,
+  Tooltip,
+  useTheme,
 } from "@mui/material";
 import { motion, Variants } from "framer-motion";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
-import Text2 from "../text/Text2"; // Update the path based on your project structure
+import Text2 from "../text/Text2";
+import { columns, tableData } from "./OffersList.constants";
+import {
+  StyledIconButton,
+  StyledTable,
+  StyledTableCellBody,
+  StyledTableCellHead,
+} from "./OffersList.styles";
 
-// Sample data for the table rows
-const tableData = [
-  {
-    id: 371,
-    offerToken: "Token 1",
-    buyerToken: "USDC",
-    rateOfReturn: "10%",
-    offerYield: "12%",
-    percentDiff: "20%",
-    officialPrice: "$51.35",
-    askedPrice: "$60.00",
-    diffPrice: "$16.85%",
-    stock: "12.28838",
-  },
-  {
-    id: 372,
-    offerToken: "Token 2",
-    buyerToken: "USDT",
-    rateOfReturn: "15%",
-    offerYield: "18%",
-    percentDiff: "25%",
-    officialPrice: "$45.00",
-    askedPrice: "$55.00",
-    diffPrice: "$10.00%",
-    stock: "8.1256",
-  },
-];
-
-// Variants for row animation
 const rowVariants: Variants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
-      delay: i * 0.5,
-      duration: 0.6,
+      delay: i * 0.08,
+      duration: 0.4,
       ease: "easeOut",
     },
   }),
 };
 
+const getRowBg = (i: number, darkMode: boolean) =>
+  i % 2 === 0
+    ? darkMode
+      ? "#2a2a2a"
+      : "#ffffff"
+    : darkMode
+    ? "#1f1f1f"
+    : "#f4f9f9";
+
 const OffersList: React.FC = () => {
+  const theme = useTheme();
+  const darkMode = theme.palette.mode === "dark";
+
   return (
     <Box sx={{ overflowX: "auto" }}>
-      <Table
-        aria-label="animated table"
-        sx={{
-          borderCollapse: "unset",
-          whiteSpace: "nowrap",
-          borderRadius: "8px",
-          border: "2px solid #00dbe3",
-        }}
-      >
-        <TableHead sx={{ background: "#f3f3f3" }}>
-          <TableRow>
-            {[
-              "Offer ID",
-              "Offer Token",
-              "Buyer Token",
-              "Rate of Return",
-              "Offer Yield",
-              "% Difference",
-              "Official Price",
-              "Asked Price",
-              "% Diff Price",
-              "Stock",
-              "Cart",
-              "View",
-            ].map((heading) => (
-              <TableCell key={heading} align="center">
+      <StyledTable aria-label="offers table">
+        <TableHead>
+          <TableRow sx={{ background: darkMode ? "#1e1e1e" : "#f9fbfc" }}>
+            {columns.map((heading) => (
+              <StyledTableCellHead align="center" key={heading}>
                 <Text2>{heading}</Text2>
-              </TableCell>
+              </StyledTableCellHead>
             ))}
           </TableRow>
         </TableHead>
 
-        <motion.tbody initial="hidden" animate="visible">
-          {tableData.map((row, index) => (
-            <motion.tr
-              key={row.id}
-              variants={rowVariants}
-              custom={index}
-              style={{ display: "table-row" }}
-            >
-              <TableCell align="center">{row.id}</TableCell>
-              <TableCell>{row.offerToken}</TableCell>
-              <TableCell>{row.buyerToken}</TableCell>
-              <TableCell align="center">{row.rateOfReturn}</TableCell>
-              <TableCell align="center">{row.offerYield}</TableCell>
-              <TableCell align="center">{row.percentDiff}</TableCell>
-              <TableCell align="center">{row.officialPrice}</TableCell>
-              <TableCell align="center">{row.askedPrice}</TableCell>
-              <TableCell align="center">{row.diffPrice}</TableCell>
-              <TableCell align="center">{row.stock}</TableCell>
-              <TableCell align="center">
-                <IconButton>
-                  <ShoppingCartOutlinedIcon sx={{ color: "#00dbe3" }} />
-                </IconButton>
-              </TableCell>
-              <TableCell align="center">
-                <IconButton>
-                  <RemoveRedEyeOutlinedIcon sx={{ color: "#00dbe3" }} />
-                </IconButton>
-              </TableCell>
-            </motion.tr>
-          ))}
-        </motion.tbody>
-      </Table>
+        <TableBody component={motion.tbody} initial="hidden">
+          {tableData.map((row, index) => {
+            const bgColor = getRowBg(index, darkMode);
+            return (
+              <motion.tr
+                key={row.id}
+                custom={index}
+                variants={rowVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                whileTap={{ scale: 0.98 }}
+                whileHover={{
+                  scale: 1.01,
+                  boxShadow: darkMode
+                    ? "0 4px 20px rgba(255,255,255,0.05)"
+                    : "0 4px 20px rgba(0,0,0,0.08)",
+                }}
+                style={{ display: "table-row" }}
+              >
+                {[
+                  row.id,
+                  row.offerToken,
+                  row.buyerToken,
+                  row.rateOfReturn,
+                  row.offerYield,
+                  row.percentDiff,
+                  row.officialPrice,
+                  row.askedPrice,
+                  row.diffPrice,
+                  row.stock,
+                ].map((val, i) => (
+                  <StyledTableCellBody
+                    key={i}
+                    align="center"
+                    $bgColor={bgColor}
+                  >
+                    {val}
+                  </StyledTableCellBody>
+                ))}
+
+                <StyledTableCellBody align="center" $bgColor={bgColor}>
+                  <Tooltip title="Add to cart">
+                    <StyledIconButton>
+                      <ShoppingCartOutlinedIcon />
+                    </StyledIconButton>
+                  </Tooltip>
+                </StyledTableCellBody>
+
+                <StyledTableCellBody align="center" $bgColor={bgColor}>
+                  <Tooltip title="View details">
+                    <StyledIconButton>
+                      <RemoveRedEyeOutlinedIcon />
+                    </StyledIconButton>
+                  </Tooltip>
+                </StyledTableCellBody>
+              </motion.tr>
+            );
+          })}
+        </TableBody>
+      </StyledTable>
     </Box>
   );
 };

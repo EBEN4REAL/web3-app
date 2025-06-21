@@ -43,16 +43,5 @@ yarn install
 # Run development server
 yarn dev
 
-## 📸 Screenshots
-
-### 🖥️ Desktop View
-
-![image](https://github.com/user-attachments/assets/0f3ba11f-b84e-402f-bf5e-a87a143bd402)
-
-
-
-### 📱 Mobile View
-
-![image](https://github.com/user-attachments/assets/e95c15a5-98f3-4ab5-b8de-bab82f051359)
 
 

@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import { navigations } from "./navigation.data";
 import { Link } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import { useAccount, useDisconnect } from "wagmi";
+import { ConnectButton, useConnectModal } from "@rainbow-me/rainbowkit";
 
 type NavigationData = {
   path: string;
@@ -13,16 +15,22 @@ const Navigation: FC = () => {
   const location = useLocation();
   const currentPath = location.pathname;
 
+  const { isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
+  const { openConnectModal } = useConnectModal();
+
   return (
     <Box
       sx={{
         display: "flex",
-        flexFlow: "wrap",
-        justifyContent: "end",
-        flexDirection: { xs: "column", lg: "row" }
+        flexDirection: "row",
+        flexWrap: "nowrap",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 2,
       }}
     >
-      {navigations.map(({ path: destination, label }: NavigationData) =>
+      {navigations.map(({ path: destination, label }: NavigationData) => (
         <Box
           key={label}
           component={Link}
@@ -39,15 +47,14 @@ const Navigation: FC = () => {
             fontWeight: 700,
             alignItems: "center",
             justifyContent: "center",
-            px: { xs: 0, lg: 3 },
-            mb: { xs: 3, lg: 0 },
-            fontSize: "20px",
-            ...destination === "/" && { color: "primary.main" },
+            px: 1,
+            fontSize: "16px",
+            ...(destination === "/" && { color: "primary.main" }),
             "& > div": { display: "none" },
             "&.current>div": { display: "block" },
             "&:hover": {
-              color: "text.disabled"
-            }
+              color: "text.disabled",
+            },
           }}
         >
           <Box
@@ -55,37 +62,45 @@ const Navigation: FC = () => {
               position: "absolute",
               top: 12,
               transform: "rotate(3deg)",
-              "& img": { width: 44, height: "auto" }
+              "& img": { width: 44, height: "auto" },
             }}
           >
-            {/* eslint-disable-next-line */}
             <img src="/images/headline-curve.svg" alt="Headline curve" />
           </Box>
           {label}
         </Box>
-      )}
+      ))}
+
       <Box
         sx={{
-          position: "relative",
-          color: "white",
-          cursor: "pointer",
-          textDecoration: "none",
-          textTransform: "uppercase",
-          fontWeight: 600,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          px: { xs: 0, lg: 3 },
-          mb: { xs: 3, lg: 0 },
-          fontSize: "24px",
-          lineHeight: "6px",
-          width: "324px",
-          height: "45px",
-          borderRadius: "6px",
-          backgroundColor: "#00dbe3"
+          ml: "auto", // push to far right
         }}
       >
-        Connect Wallet
+        {!isConnected ? (
+          <Box
+            sx={{
+              color: "white",
+              cursor: "pointer",
+              textDecoration: "none",
+              textTransform: "uppercase",
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "16px",
+              width: "180px",
+              height: "45px",
+              borderRadius: "6px",
+              backgroundColor: "#00dbe3",
+              ":hover": { backgroundColor: "#00c0c8" },
+            }}
+            onClick={() => openConnectModal?.()}
+          >
+            Connect Wallet
+          </Box>
+        ) : (
+          <ConnectButton />
+        )}
       </Box>
     </Box>
   );

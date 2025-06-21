@@ -1,365 +1,152 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
-  Checkbox,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Typography,
   useTheme,
+  Switch,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import SearchBar from "../../components/text/SearchText";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getAllBlogs } from "../../store/blogs";
-import { selectBlogSearch } from "../../store/blogs/selectors";
-import Text2 from "../../components/text/Text2";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
-import { useNavigate } from "react-router-dom";
+import { motion, Variants } from "framer-motion";
+import SearchIcon from "@mui/icons-material/Search";
+import OffersList from "../../components/OffersList/OffersList";
 
-const Dashboard = () => {
-  const [isPublished, setIsPublished] = useState(false);
-
-  const dispatch = useAppDispatch();
-  const searchText = useAppSelector(selectBlogSearch);
-  const navigate = useNavigate();
-
+const ImprovedDashboard = () => {
   const theme = useTheme();
 
-  const [search, setSearch] = useState(searchText);
-
-  const handleSearchChange = (str: string) => {
-    setSearch(str);
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
   };
 
-  const handleSearchSubmit = (evt: any) => {
-    if (evt.key === "Enter") dispatch(getAllBlogs({ search: search, page: 1 }));
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
   };
-
-  const handleDetail = () => {
-    navigate("/sell");
-  };
-
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   return (
     <Box>
-      <Box sx={{ background: "linear-gradient(to bottom, #173039, #00b4c9)" }}>
-        <Box
-          sx={{
-            padding: "50px 80px",
-            [theme.breakpoints.up("sm")]: { maxWidth: "1400px" },
-            width: "calc(100vw - 6px)",
-            margin: "auto",
-            textAlign: "left",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "45px",
-              lineHeight: "60px",
-              color: "#fff",
-              fontWeight: 700,
-              marginBottom: "20px",
-            }}
-          >
-            Filters
-          </Typography>
-          <SearchBar
-            search={search}
-            handleSearch={handleSearchChange}
-            handleKeyDown={handleSearchSubmit}
-          />
-          <Box
-            sx={{ display: "flex", alignItems: "center", paddingLeft: "20px" }}
-          >
-            <Checkbox
-              {...label}
-              checked={isPublished}
-              sx={{ "& .MuiSvgIcon-root": { fill: "#ffffff" } }}
-              onClick={(e: any) => setIsPublished(!isPublished)}
-            />
-            <Typography
-              sx={{
-                fontSize: "18px",
-                lineHeight: "60px",
-                color: "#fff",
-                fontWeight: 400,
-              }}
-            >
-              Show only whitelisted properties's offers
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
+      {/* Header Section */}
       <Box
         sx={{
-          minHeight: "calc(100vh - 450px)",
-          backgroundColor: "#fff",
-          padding: "80px 24px",
-          display: "flex",
-          gap: "20px",
+          backgroundImage:
+            'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/images/network-img-1.jpg")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          py: 10,
         }}
       >
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#00dbe3",
-              borderRadius: "6px",
-              width: "352px",
-              height: "64px",
-              fontSize: "24px",
-              lineHeight: "60px",
-              textTransform: "uppercase",
-              color: "#ffffff",
-              fontWeight: 700,
-            }}
+        <Box
+          sx={{ maxWidth: 1400, mx: "auto", px: 4, textAlign: "left" }}
+          component={motion.div}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Typography variant="h3" color="white" fontWeight={700} gutterBottom>
+            Explore Offers
+          </Typography>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
           >
-            Sell
-          </Button>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#23a2bb",
-              borderRadius: "6px",
-              width: "352px",
-              height: "64px",
-              fontSize: "24px",
-              lineHeight: "60px",
-              textTransform: "uppercase",
-              color: "#ffffff",
-              fontWeight: 700,
-            }}
+            <Box
+              sx={{
+                background: "rgba(255,255,255,0.2)",
+                borderRadius: 2,
+                display: "flex",
+                alignItems: "center",
+                px: 2,
+                py: 1,
+                mt: 2,
+                width: "100%",
+                maxWidth: 500,
+              }}
+            >
+              <SearchIcon sx={{ color: "white" }} />
+              <input
+                placeholder="Search for offers..."
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  outline: "none",
+                  color: "white",
+                  marginLeft: 10,
+                  width: "100%",
+                }}
+              />
+            </Box>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
           >
-            Buy
-          </Button>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#173039",
-              borderRadius: "6px",
-              width: "352px",
-              height: "64px",
-              fontSize: "24px",
-              lineHeight: "60px",
-              textTransform: "uppercase",
-              color: "#ffffff",
-              fontWeight: 700,
-            }}
-          >
-            Exchange
-          </Button>
+            <Box sx={{ mt: 3, display: "flex", alignItems: "center" }}>
+              <Typography color="white" mr={2}>
+                Show Whitelisted Only
+              </Typography>
+              <Switch defaultChecked color="info" />
+            </Box>
+          </motion.div>
         </Box>
-        <Box sx={{ overflow: "auto", width: { sm: "100%" } }}>
-          <Table
-            aria-label="simple table"
-            sx={{
-              borderCollapse: "unset",
-              whiteSpace: "nowrap",
-              borderRadius: "8px",
-              border: "2px solid #00dbe3",
-            }}
+      </Box>
+
+      {/* Action Buttons */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 3,
+          mt: -4,
+          zIndex: 2,
+          position: "relative",
+        }}
+        component={motion.div}
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
+        {["Sell", "Buy", "Exchange"].map((label, i) => (
+          <motion.div
+            key={label}
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
           >
-            <TableHead sx={{ background: "#f3f3f3" }}>
-              <TableRow
-                sx={{
-                  "& th": {
-                    padding: "0px 5px",
-                    borderRight: "2px solid #00dbe3",
-                  },
-                  "& th:first-child": {
-                    borderTopLeftRadius: "8px",
-                  },
-                  "& th:last-child": {
-                    borderRight: "0px",
-                    borderTopRightRadius: "8px",
-                  },
-                }}
-              >
-                <TableCell align="center">
-                  <Text2>Offer ID</Text2>
-                </TableCell>
-                <TableCell>
-                  <Text2>Offer Token</Text2>
-                </TableCell>
-                <TableCell>
-                  <Text2>Buyer token</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>Rate of Return</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>offer Yield</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>% Difference</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>Official price</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>Asked Price</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>% Difference</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>Stock</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>Cart</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>View</Text2>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow
-                hover
-                sx={{
-                  cursor: "pointer",
-                  "& td": {
-                    padding: "0px 5px",
-                    borderRight: "2px solid #00dbe3",
-                  },
-                  "& td:last-child": { borderRight: "0px" },
-                }}
-              >
-                <TableCell align="center">
-                  <Text2>371</Text2>
-                </TableCell>
-                <TableCell>
-                  <Text2>Token 1</Text2>
-                </TableCell>
-                <TableCell>
-                  <Text2>USDC</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>10%</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>12%</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>20%</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>$51.35</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>$60.00</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>$16.85%</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>12.28838</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    aria-label="delete"
-                    onClick={(event: any) => {
-                      event.stopPropagation();
-                    }}
-                  >
-                    <ShoppingCartOutlinedIcon
-                      sx={{ fontSize: "24px", color: "#00dbe3" }}
-                    />
-                  </IconButton>
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    aria-label="delete"
-                    onClick={(event: any) => {
-                      event.stopPropagation();
-                      handleDetail();
-                    }}
-                  >
-                    <RemoveRedEyeOutlinedIcon
-                      sx={{ fontSize: "24px", color: "#00dbe3" }}
-                    />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-              <TableRow
-                hover
-                sx={{
-                  cursor: "pointer",
-                  "& td": {
-                    padding: "0px 5px",
-                    borderRight: "2px solid #00dbe3",
-                  },
-                  "& td:last-child": { borderRight: "0px" },
-                }}
-              >
-                <TableCell align="center">
-                  <Text2>371</Text2>
-                </TableCell>
-                <TableCell>
-                  <Text2>Token 1</Text2>
-                </TableCell>
-                <TableCell>
-                  <Text2>USDC</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>10%</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>12%</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>20%</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>$51.35</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>$60.00</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>$16.85%</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <Text2>12.28838</Text2>
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    aria-label="delete"
-                    onClick={(event: any) => {
-                      event.stopPropagation();
-                    }}
-                  >
-                    <ShoppingCartOutlinedIcon
-                      sx={{ fontSize: "24px", color: "#00dbe3" }}
-                    />
-                  </IconButton>
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    aria-label="delete"
-                    onClick={(event: any) => {
-                      event.stopPropagation();
-                      handleDetail();
-                    }}
-                  >
-                    <RemoveRedEyeOutlinedIcon
-                      sx={{ fontSize: "24px", color: "#00dbe3" }}
-                    />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </Box>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: ["#00dbe3", "#23a2bb", "#173039"][i],
+                width: 180,
+                height: 56,
+                fontWeight: 600,
+                fontSize: 16,
+              }}
+            >
+              {label}
+            </Button>
+          </motion.div>
+        ))}
+      </Box>
+
+      {/* Table Section */}
+      <Box
+        sx={{ maxWidth: 1400, mx: "auto", px: 2, py: 8 }}
+        component={motion.div}
+        initial="hidden"
+        animate="show"
+        variants={containerVariants}
+      >
+        <OffersList />
       </Box>
     </Box>
   );
 };
 
-export default Dashboard;
+export default ImprovedDashboard;

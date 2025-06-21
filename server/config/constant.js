@@ -16,3 +16,13 @@ const Ronin = "https://api.roninchain.com"
 const xDai = "https://rpc.xdaichain.com"
 
 module.exports =  { EthMainnet, PolygonMainnet, BscMainnet, ArbitrumMainnet, Avalanche, Fantom, Harmony, Heco, Klay, Matic, Moonbeam, Optimism, Palm, Ronin, xDai };
+
+
+//   mainnet,
+//   polygon,
+//   bsc,
+//   arbitrum,
+//   avalanche,
+//   fantom,
+//   optimism,
+//   zksync,

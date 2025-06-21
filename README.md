@@ -36,12 +36,11 @@ A sleek, responsive Web3 dashboard built with **React**, **Material UI**, **Fram
 
 ## 📦 Setup
 
+
 ```bash
 # Install dependencies
 yarn install
 
 # Run development server
 yarn dev
-
-
 

@@ -23,7 +23,7 @@ const AppButton: React.FC<AppButtonProps> = ({
       sx={{
         backgroundColor: variantColors[variantType],
         width: 180,
-        height: 56,
+        height: 42,
         fontWeight: 600,
         fontSize: 16,
         ...sx,

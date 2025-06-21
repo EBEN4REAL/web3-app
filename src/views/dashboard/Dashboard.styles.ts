@@ -9,7 +9,7 @@ export const actionButtonWrapperSx: SxProps<Theme> = (theme) => ({
   mt: theme.spacing(4),
 
   [theme.breakpoints.up("md")]: {
-    marginTop: theme.spacing(-4),
+    marginTop: theme.spacing(-3),
     position: "relative",
     zIndex: 9999
   },
